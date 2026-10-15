@@ -40,7 +40,7 @@ public static class BuildProgressText
         "Подготовка" or "Копирование носителя" => (0, 8),
         "Экспорт редакции" => (8, 15), "Монтирование" => (15, 25), "Инвентаризация" => (25, 28),
         "Пользовательское обслуживание" => (28, 32), "Удаление приложений" => (32, 44), "Дополнительные компоненты" => (44, 53),
-        ".NET 3.5" => (53, 55), "Параметры Windows" => (55, 57), "Очистка компонентов" => (57, 65),
+        ".NET 3.5" => (61, 63), "Параметры Windows" => (63, 65), "Очистка компонентов" => (53, 61),
         "Особые компоненты" => (65, 68), "Усечение Core" => (68, 72), "Избыточные данные" => (71, 72), "Фиксация" => (72, 77),
         ResumeCheckStage => (72, 77),
         "Образ установки" => (77, 80), "Сжатие" => (80, 93), "Создание ISO" => (93, 98),
@@ -137,6 +137,16 @@ internal sealed class BuildOperationTracker(IProgress<BuildProgress>? progress, 
         var id = stageId;
         stageId = null;
         if (id is not null) CompleteStage(id);
+    }
+
+    /// <summary>Marks the open stage as deliberately skipped; <see cref="EndStage"/> keeps that outcome instead of reporting Completed.</summary>
+    public void SkipStage(string reason)
+    {
+        var id = stageId ?? throw new InvalidOperationException("Нет открытого этапа, который можно пропустить.");
+        var title = operations[id].Title;
+        itemId = null;
+        Publish(id, BuildOperationState.Skipped, reason);
+        log($"{title}: {reason}");
     }
 
     public async Task RunAsync(string id, string stage, string title, Func<Task> action, Func<string?>? completedDetail = null)
@@ -248,6 +258,7 @@ internal sealed class BuildOperationTracker(IProgress<BuildProgress>? progress, 
     private void CompleteStage(string id)
     {
         var operation = operations[id];
+        if (operation.State == BuildOperationState.Skipped) return;
         Publish(id, BuildOperationState.Completed);
         log($"Этап завершён: {operation.Title}");
     }
@@ -275,8 +286,8 @@ internal sealed class BuildOperationTracker(IProgress<BuildProgress>? progress, 
     {
         var operation = operations[id];
         if (state == BuildOperationState.Running) started[id] = clock.ElapsedTicks;
-        else if (state is BuildOperationState.Completed or BuildOperationState.Failed or BuildOperationState.Cancelled &&
-                 started.TryGetValue(id, out var start))
+        else if (state is BuildOperationState.Completed or BuildOperationState.Failed or BuildOperationState.Cancelled or
+                     BuildOperationState.Skipped && started.TryGetValue(id, out var start))
             durations[id] = (clock.ElapsedTicks - start) * 1000d / Stopwatch.Frequency;
         operations[id] = operation with { State = state, Detail = detail };
         progress?.Report(new(operation.Stage, operation.Title, OperationId: id, State: state, Detail: detail));

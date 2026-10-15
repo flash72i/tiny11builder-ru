@@ -97,17 +97,19 @@ public static class ToolLocator
 
     internal static void EnsureServicingVersion(Version version, WindowsImage image)
     {
-        var required = ServicingBase(image.Version.Build);
-        var actual = ServicingBase(version.Build);
-        if (version.Major < image.Version.Major || version.Major == image.Version.Major &&
-            (version.Minor < image.Version.Minor || version.Minor == image.Version.Minor && actual < required))
-            throw new InvalidOperationException($"Этот образ — сборка {image.Version.Build} (база обслуживания {required}), " +
-                $"но установленные инструменты работы с образами — версия {version}. " +
-                "Windows 10 can build Windows 11 images with compatible tools. Install the current Windows ADK Deployment Tools " +
-                "and its servicing updates, then reopen the app; it detects them automatically. " +
-                "Unknown Insider/Canary builds may need a preview ADK or a newer host. " +
-                "Download: https://learn.microsoft.com/windows-hardware/get-started/adk-install");
+        if (!SupportsServicing(version, image))
+            throw new ServicingToolsRequiredException(
+                $"Образ — сборка {image.Version.Build}, нужна база обслуживания {ServicingBase(image.Version.Build)}; установлены инструменты {version}. " +
+                "Install current Windows ADK Deployment Tools and servicing updates, then reopen; the app detects them automatically. " +
+                "Windows 10 can stay installed.");
     }
+
+    internal static bool SupportsServicing(Version version, WindowsImage image) =>
+        version.Major > image.Version.Major || version.Major == image.Version.Major &&
+        (version.Minor > image.Version.Minor || version.Minor == image.Version.Minor &&
+            ServicingBase(version.Build) >= ServicingBase(image.Version.Build));
+
+    public static bool SupportsServicing(string dism, WindowsImage image) => SupportsServicing(ServicingVersionOf(dism), image);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct FileInfoNative { public int Size; public IntPtr Path; public IntPtr Handle; public IntPtr Subject; }
@@ -121,6 +123,7 @@ public static class ToolLocator
             Pointer = Marshal.AllocHGlobal(Marshal.SizeOf<FileInfoNative>());
             Marshal.StructureToPtr(new FileInfoNative { Size = Marshal.SizeOf<FileInfoNative>(), Path = name }, Pointer, false);
         }
+
         public void Dispose() { Marshal.FreeHGlobal(Pointer); Marshal.FreeCoTaskMem(name); }
     }
     [StructLayout(LayoutKind.Sequential)]
