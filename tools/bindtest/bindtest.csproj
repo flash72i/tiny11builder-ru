@@ -1,4 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><AssemblyName>BindTest</AssemblyName><EnableWindowsTargeting>true</EnableWindowsTargeting></PropertyGroup>
-  <ItemGroup><Reference Include="Tiny11Builder.Core"><HintPath>/tmp/arena/tenants/11b3ac25-5c60-41f6-94ec-f776246a2d01/sessions/c0f8c232-1c7a-44fd-bcf8-eac7b9595293/workspace/work/x64/Tiny11Builder-0.1.1-win-x64/Tiny11Builder.Core.dll</HintPath></Reference></ItemGroup>
-</Project>
