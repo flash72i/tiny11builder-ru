@@ -80,11 +80,11 @@ public static class RuLocalization
                 if (queue is not null)
                 {
                     var timer = queue.CreateTimer();
-                    timer.Interval = TimeSpan.FromMilliseconds(500);
-                    timer.IsRepeating = true;
+                    timer.Interval = TimeSpan.FromMilliseconds(1200);
+                    timer.IsRepeating = true;   // rev.3.3: lifetime passes — late materialized UI (dropdowns, review texts) also gets repaired
                     timer.Tick += (_, _) =>
                     {
-                        if (++_passes > 12) { Safe(() => timer.Stop()); RuLog.Info("timer finished"); return; }
+                        _passes++;
                         SafePass(w, $"tick {_passes}");
                     };
                     timer.Start();
@@ -243,6 +243,7 @@ public static class RuLocalization
             case TextBox tx:
                 n += TrySwap(() => tx.PlaceholderText, v => tx.PlaceholderText = v);
                 n += TrySwap(() => tx.Header as string, v => tx.Header = v);
+                try { var fx = Repair(tx.Text); if (fx is not null) { tx.Text = fx; n++; } } catch { }
                 break;
             case ComboBox cb:
                 n += TrySwap(() => cb.Header as string, v => cb.Header = v);

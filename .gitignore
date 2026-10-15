@@ -1,5 +1,12 @@
-bin/
-obj/
-__pycache__/
-*.log
-out/
+**/bin/
+**/obj/
+.vs/
+artifacts/
+TestResults/
+*.user
+*.iso
+*.wim
+*.esd
+*.swm
+*.vhd
+*.vhdx
