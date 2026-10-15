@@ -1,0 +1,82 @@
+[
+[
+"Подготовка",
+"Prepare"
+],
+[
+"Копирование носителя",
+"Copy media"
+],
+[
+"Экспорт редакции",
+"Export edition"
+],
+[
+"Монтирование",
+"Mount"
+],
+[
+"Инвентаризация",
+"Inventory"
+],
+[
+"Пользовательское обслуживание",
+"Custom servicing"
+],
+[
+"Удаление приложений",
+"Remove apps"
+],
+[
+"Дополнительные компоненты",
+"Optional features"
+],
+[
+"Параметры Windows",
+"Windows settings"
+],
+[
+"Очистка компонентов",
+"Component cleanup"
+],
+[
+"Особые компоненты",
+"Advanced payloads"
+],
+[
+"Усечение Core",
+"Core pruning"
+],
+[
+"Избыточные данные",
+"Redundant data"
+],
+[
+"Фиксация",
+"Commit"
+],
+[
+"Образ установки",
+"Setup image"
+],
+[
+"Проверка сохранённого прогресса",
+"Check saved progress"
+],
+[
+"Сжатие",
+"Compress"
+],
+[
+"Создание ISO",
+"Create ISO"
+],
+[
+"Проверка результата",
+"Verify output"
+],
+[
+"Очистка после отмены",
+"Cancel cleanup"
+]
+]

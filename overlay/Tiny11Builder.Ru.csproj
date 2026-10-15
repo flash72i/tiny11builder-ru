@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Tiny11Builder.Ru</AssemblyName>
+    <RootNamespace>Tiny11Builder.Ru</RootNamespace>
+    <Version>0.1.1</Version>
+    <Platforms>AnyCPU</Platforms>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WinUI"><HintPath>refs\Microsoft.WinUI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Microsoft.InteractiveExperiences.Projection"><HintPath>refs\Microsoft.InteractiveExperiences.Projection.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="WinRT.Runtime"><HintPath>refs\WinRT.Runtime.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>
