@@ -1,3 +1,5 @@
+<img src="docs/images/icon-ru.png" alt="Иконка Tiny11 Builder RU" width="96" align="right">
+
 # Tiny11 Builder WinUI 0.1.2 — полностью русский исходный код
 
 Полная русификация [Tiny11 Builder WinUI 0.1.2](https://github.com/ntdevlabs/tiny11builder/releases/tag/winui-v0.1.2) —
